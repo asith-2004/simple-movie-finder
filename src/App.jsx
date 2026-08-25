@@ -1,14 +1,21 @@
-import MovieCard from "./Components/MovieCard"
+
+import Home from "./pages/Home.jsx"
+import Favourite from "./pages/Favourite.jsx"
+import { Routes, Route } from "react-router-dom"
+import NavBar from "./Components/NavBar.jsx"
 
 function App() {
 
-
  return (
-  <>
-    <MovieCard movie={{title: "Iron Man" , release_year: 2008 , rate : "8/10"}}/>
-    <MovieCard movie={{title: "DeadPool" , release_year: 2009 , rate : "7/10"}}/>
-    <MovieCard movie={{title: "Cars" , release_year: 2008 , rate : "8/10"}}/>
-  </>
+  <div>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/fav" element={<Favourite/>} />
+      </Routes>
+  </div>
+    
+
   )
 }
 
