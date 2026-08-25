@@ -1,0 +1,20 @@
+/*
+    -> Get a free API_KEY from "themoviedb.org"
+    ONLY can get their limited movies
+    
+*/
+
+const API_KEY = "***REMOVED***";
+const BASE_URL = "https://api.themoviedb.org/3";
+
+export const getMovieList = async ()=> {
+    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
+    const data = await response.json();
+    return data.results;
+}
+
+export const searchMovies = async (query)=>{
+    const response = await fetch(`${BASE_URL}/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+    const data = await response.json();
+    return data.results;
+}
