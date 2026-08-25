@@ -1,15 +1,34 @@
 import MovieCard from "../Components/MovieCard";
-import React, {useState} from "react";
+import {useState, useEffect} from "react";
+import { searchMovies, getMovieList } from "../services/api";
 
 function Home(){
 
-    const [movies, setMovies] = useState([{title: "Iron Man" , release_year: 2008 , rate : "8/10"},
-                                                            {title: "DeadPool" , release_year: 2009 , rate : "7/10"},
-                                                            {title: "Cars" , release_year: 2008 , rate : "8/10"}]);
-
-    //const [searchInput, setSearchInput] = useState("");
+    const [movies, setMovies] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const [error,setError]= useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    
+
+//  -> Try to load movies - render only one time 
+    useEffect(()=>{
+        const loadMovies = async ()=> {
+
+            try{                         
+                const movieList = await getMovieList();
+                setMovies(movieList);
+                 
+            } catch(err){
+                console.error(err);
+                setError("Failed to Load...")
+            } finally{
+                setIsLoading(false);
+            }
+        }
+        loadMovies()
+    
+    },[]);
 
     
     function onSearchChange(event){
@@ -23,7 +42,7 @@ function Home(){
     // }
 
     const handleSearch = (e)=>{
-        e.preventDefault();         //to stop refresh the page
+        e.preventDefault();         // -> to stop refresh the page 
         setSearchQuery(searchQuery);
         console.log("searched : " + searchQuery)
         setSearchQuery("");

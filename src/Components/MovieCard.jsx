@@ -4,8 +4,8 @@
 function MovieCard({movie}){
 
     const movieTitle = movie.title;
-    const movieReleaseYear = movie.release_year;
-    const movieRate = movie.rate;
+    const movieReleaseYear = movie.release_date;
+    const movieImage = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
 
     function onFavouriteHandler(){
 
@@ -14,7 +14,7 @@ function MovieCard({movie}){
     return (
         <div className="movie-card">
             <div className="movie-banner">
-                <img src="https://placehold.co/100" alt={movieTitle} />
+                <img src={movieImage} alt={movieTitle} />
                 <div className="movie-overlay">
                     <button onClick={onFavouriteHandler}>🤍</button>
                 </div>
@@ -22,7 +22,6 @@ function MovieCard({movie}){
             <div className="movie-info">
                 <h3>{movieTitle}</h3>
                 <p>{movieReleaseYear}</p>
-                <p>{movieRate}</p>
             </div>
         </div>
     )
