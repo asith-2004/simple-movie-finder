@@ -2,6 +2,8 @@ import MovieCard from "../Components/MovieCard";
 import {useState, useEffect} from "react";
 import { searchMovies, getMovieList } from "../services/api";
 
+
+
 function Home(){
 
     const [movies, setMovies] = useState([]);
@@ -9,8 +11,8 @@ function Home(){
 
     const [error,setError]= useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [clearInput, setClearInput] = useState("");
     
-
 //  -> Try to load movies - render only one time 
     useEffect(()=>{
         const loadMovies = async ()=> {
@@ -33,6 +35,7 @@ function Home(){
     
     function onSearchChange(event){
         setSearchQuery(() => event.target.value);
+        
     }
 
     // function onSearchClick(){
@@ -41,26 +44,46 @@ function Home(){
     //     console.log("searched :" + searchedInput)
     // }
 
-    const handleSearch = (e)=>{
+    const onSearchClick =async (e)=>{
         e.preventDefault();         // -> to stop refresh the page 
-        setSearchQuery(searchQuery);
-        console.log("searched : " + searchQuery)
-        setSearchQuery("");
+
+        if (!searchQuery) return false;
+        if (isLoading) return false;
+
+
+
+        setIsLoading(true);
+        try{
+            const movie = await searchMovies(searchQuery);
+
+            setSearchQuery(movie);
+            
+        } catch(error){
+            console.error(error);
+            setError("Could not Fetch...")
+
+        }
+        finally{
+            setIsLoading(false);
+            setClearInput("");
+        }
+
+       
     };
 
     return (
 
         <div className="home-container">
 
-            <form className="search-movie-input" onSubmit={handleSearch}>
-                <input type="text" onChange={onSearchChange} value={searchQuery}/>
-                <button className="search-button" type="submit" onClick={handleSearch}>Search</button> 
+            <form className="search-movie-input">
+                <input type="text" onChange={onSearchChange} value={clearInput}/>
+                <button className="search-button" type="submit" onClick={(e)=>onSearchClick(e)}>Search</button> 
             </form>
              
              <div className="movie-collection">
                 {movies.map((
-                    movie,index) =>(
-                        movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={index} />
+                    movie) =>(
+                        movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={movie.id} />
                 ))
                 }
              </div>
