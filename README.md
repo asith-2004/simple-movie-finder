@@ -15,5 +15,19 @@ A React-based movie discovery application that allows users to search for movies
 * Vite
 * Movie API
 
+## Project Structure
+
+simple-movie-finder/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── context/
+│   ├── services/
+│   ├── App.jsx
+│   └── main.jsx
+├── package.json
+└── README.md
+
 ## Purpose
 This project was created to practice React development, API integration, state management, Context API, and Local Storage by building a simple movie discovery application.
