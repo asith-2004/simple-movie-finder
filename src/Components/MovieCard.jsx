@@ -11,9 +11,12 @@ function MovieCard({movie}){
     const {addFavMovie,removeFavMovie,isFavourite} = useMovieContext();
     const favourite = isFavourite(movie.id);
 
+
+    // -> send .this movie id to check is that a fav movie or not. if it favouriteMovies it will return "true";
+
     function onFavouriteHandler(e){
         e.preventDefault()
-        if(favourite) removeFavMovie(movie.id)
+        if(favourite) removeFavMovie(movie.id)      // ->> if it true already in the fav movies, need to remove it from their
         else addFavMovie(movie)
     }
     return (
