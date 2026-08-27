@@ -13,19 +13,23 @@ export function MovieProvider({children}){
         if (savedFavMovieList) setFavouriteMovies(JSON.parse(savedFavMovieList));
     },[])
 
+    useEffect(()=>{
+        localStorage.setItem("favouriteMovies",JSON.stringify(favouriteMovies));
+    },[favouriteMovies]);
+
     const addFavMovie = (movie)=>{
         setFavouriteMovies(m =>([...m,movie]));
-        localStorage.setItem("favouriteMovies",JSON.stringify(favouriteMovies));
     }
 
     const removeFavMovie = (movieID)=>{
-        setFavouriteMovies(favouriteMovies.filter(movie=> movieID !== movie.id));
-        localStorage.setItem(JSON.stringify("favouriteMovies",JSON.stringify(favouriteMovies)));
+        setFavouriteMovies(favouriteMovies.filter(movie=> movie.id !== movieID));
     }
+
+    const isFavourite = (movieId)=> favouriteMovies.some(movie=> movie.id === movieId);
 
     return(
         <MovieContext.Provider 
-            value={{favouriteMovies,addFavMovie,removeFavMovie,}}>
+            value={{favouriteMovies,addFavMovie,removeFavMovie,isFavourite}}>
             {children}
         </MovieContext.Provider>
     );

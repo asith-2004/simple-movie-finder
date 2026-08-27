@@ -8,23 +8,20 @@ function MovieCard({movie}){
     const movieTitle = movie.title;
     const movieReleaseYear = movie.release_date;
     const movieImage = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
-    const [isFavourite, setIsFavourite] = useState(false);
-    const {addFavMovie,removeFavMovie} = useMovieContext();
+    const {addFavMovie,removeFavMovie,isFavourite} = useMovieContext();
+    const favourite = isFavourite(movie.id);
 
-    function onFavouriteHandler(){
-        setIsFavourite(!isFavourite);
-        if(!isFavourite)
-            return addFavMovie(movie)
-        else
-            return removeFavMovie(movie.id)
+    function onFavouriteHandler(e){
+        e.preventDefault()
+        if(favourite) removeFavMovie(movie.id)
+        else addFavMovie(movie)
     }
-
     return (
         <div className="movie-card">
             <div className="movie-banner">
                 <img src={movieImage} alt={movieTitle} />
                 <div className="movie-overlay">
-                    <button onClick={onFavouriteHandler}>{isFavourite ? "❤️": "🤍"}</button>
+                    <button onClick={(e)=>onFavouriteHandler(e)}>{ favourite? "❤️": "🤍"}</button>
                 </div>
             </div>
             <div className="movie-info">
