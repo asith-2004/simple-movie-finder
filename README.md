@@ -16,7 +16,7 @@ A React-based movie discovery application that allows users to search for movies
 * Movie API
 
 ## Project Structure
-
+```text
 simple-movie-finder/
 ├── public/
 ├── src/
@@ -28,6 +28,7 @@ simple-movie-finder/
 │   └── main.jsx
 ├── package.json
 └── README.md
+```
 
 ## Purpose
 This project was created to practice React development, API integration, state management, Context API, and Local Storage by building a simple movie discovery application.
