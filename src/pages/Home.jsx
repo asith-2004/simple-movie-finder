@@ -1,93 +1,83 @@
 import MovieCard from "../Components/MovieCard";
-import {useState, useEffect} from "react";
-import { searchMovies, getMovieList } from "../services/api";
+import { useState, useEffect } from "react";
+import { getMovieList } from "../services/api";
 
-
-
-function Home(){
+function Home() {
 
     const [movies, setMovies] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const [error,setError]= useState(null);
+    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [clearInput, setClearInput] = useState("");
-    
-//  -> Try to load movies - render only one time 
-    useEffect(()=>{
-        const loadMovies = async ()=> {
+    const [input, setInput] = useState("");
 
-            try{                         
+    //  -> Try to load movies - render only one time 
+    useEffect(() => {
+        const loadMovies = async () => {
+
+            try {
                 const movieList = await getMovieList();
                 setMovies(movieList);
-                 
-            } catch(err){
+
+            } catch (err) {
                 console.error(err);
                 setError("Failed to Load...")
-            } finally{
+            } finally {
                 setIsLoading(false);
             }
         }
         loadMovies()
-    
-    },[]);
+    }, []);
 
-    
-    function onSearchChange(event){
-        setSearchQuery(() => event.target.value);
-        
+
+    function onSearchChange(event) {
+        setInput(() => event.target.value)
+        // setSearchQuery(()=>input);
     }
 
-    // function onSearchClick(){
-    //     searchedInput = searchInput;
-    //     setSearchInput("");
-    //     console.log("searched :" + searchedInput)
-    // }
 
-    const onSearchClick =async (e)=>{
+    const onSearchClick = async (e) => {
         e.preventDefault();         // -> to stop refresh the page 
 
-        if (!searchQuery) return false;
+        if (!input) return false;
         if (isLoading) return false;
 
-
-
         setIsLoading(true);
-        try{
-            const movie = await searchMovies(searchQuery);
+        try {
+            setSearchQuery(input)
 
-            setSearchQuery(movie);
-            
-        } catch(error){
+        } catch (error) {
             console.error(error);
             setError("Could not Fetch...")
-
         }
-        finally{
+        finally {
             setIsLoading(false);
-            setClearInput("");
+            setInput("");
         }
-
-       
     };
 
+
     return (
+        <>
+            {isLoading ? <p>loading</p> :
 
-        <div className="home-container">
+                <div className="home-container flex flex-col">
+                    <form className="search-movie-input flex w-full max-w-xl mx-auto bg-white rounded-full my-6 justify-center " >
+                        <input placeholder="Search for movie..." className="rounded-full w-full h-12 bg-transparent py-2 pl-8 pr-32 outline-none border-2 border-gray-100 shadow-md hover:outline-none focus:ring-teal-200 focus:border-teal-200" type="text" value={input} onChange={onSearchChange} />
 
-            <form className="search-movie-input">
-                <input type="text" onChange={onSearchChange} value={clearInput}/>
-                <button className="search-button" type="submit" onClick={(e)=>onSearchClick(e)}>Search</button> 
-            </form>
-             
-             <div className="movie-collection">
-                {movies.map((
-                    movie) =>(
-                        movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={movie.id} />
-                ))
-                }
-             </div>
-        </div>
+                        <button onClick={onSearchClick} className="relative rounded-4xl bg-blue-500 right-20 text-white shadow-xs font-medium text-sm px-4 py-1 hover:opacity-80 active:opacity-70 ">Search</button>
+                    </form>
+
+                    <div className="movie-collection flex gap-[5vw] flex-wrap justify-center">
+                        {movies.map((
+                            movie) => (
+                            movie.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={movie} key={movie.id} />
+                        ))
+                        }
+                    </div>
+                </div>
+            }
+        </>
     )
 }
 

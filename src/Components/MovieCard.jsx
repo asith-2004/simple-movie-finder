@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMovieContext } from "../context/MovieContext";
+import './card.css'
 
 
 function MovieCard({movie}){
@@ -21,13 +22,13 @@ function MovieCard({movie}){
     }
     return (
         <div className="movie-card">
-            <div className="movie-banner">
-                <img src={movieImage} alt={movieTitle} />
-                <div className="movie-overlay">
+            <div className="movie-banner relative card card2">
+                <img style={{ width: '100%', height: '100%', borderRadius: '20px' }} src={movieImage} alt={movieTitle} />
+                <div className="movie-overlay absolute top-5 right-5">
                     <button onClick={(e)=>onFavouriteHandler(e)}>{ favourite? "❤️": "🤍"}</button>
                 </div>
             </div>
-            <div className="movie-info">
+            <div className="movie-info relative w-[190px] text-center">
                 <h3>{movieTitle}</h3>
                 <p>{movieReleaseYear}</p>
             </div>
